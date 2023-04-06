@@ -4,7 +4,6 @@
 <html lang="pt-BR">
 
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -25,7 +24,7 @@
       <button class="navbar-btn navbar-profile">
         {% if user.img is None %}
         <a href="{% url 'login' %}">
-          <img src="{% static 'img/unlogged.jpg' %}" alt="">
+          <img src="{% static 'img/unlogged.svg' %}" alt="">
         </a>
         {% else %}
         <a href="#">
