@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}Cadastro{% endblock %}
+
+{% block 'body' %}
+<div class="container">
+    {% if error_msg is not None %}
+        <div class="alert alert-danger" role="alert">
+            {{error_msg}}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'validation' %}">{% csrf_token %}
+        <h1>Cadastre-se</h1>
+        
+        <hr>
+
+        <label>Nome:</label>
+        <input name="name" class="form" type="text" placeholder="Nome...">
+        
+        <label>Email</label>
+        <input name="email" class="form" type="text" placeholder="Email...">
+        
+        <label>Senha</label>
+        <input name="password" class="form" type="password" placeholder="Senha...">
+        
+        <input class="btn btn-success" type="submit" value="Enviar">
+        <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+    </form>
+{%endblock%}
+

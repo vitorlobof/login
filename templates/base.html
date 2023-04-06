@@ -1,0 +1,43 @@
+{% load static %}
+
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="{% static 'base.css' %}">
+  <link rel="stylesheet" href="{% static 'form.css' %}">
+  <link rel="stylesheet" href="{% static 'buttons.css' %}">
+  <link rel="stylesheet" href="{% static 'alerts.css' %}">
+  {% block 'head' %}{% endblock %}
+
+  <title>{% block 'title' %}{% endblock %}</title>
+</head>
+
+<body>
+  <nav class="navbar">
+    <span>Sistema de Login</span>
+
+    <div class="navbar-btns navbar-btns-right">
+      <button class="navbar-btn navbar-profile">
+        {% if user.img is None %}
+        <a href="{% url 'login' %}">
+          <img src="{% static 'img/unlogged.jpg' %}" alt="">
+        </a>
+        {% else %}
+        <a href="#">
+          <img src="{{user.img.url}}" alt="">
+        </a>
+        {% endif %}
+      </button>
+    </div>
+  </nav>
+
+  {% block 'body' %}{% endblock %}
+
+</body>
+
+</html>

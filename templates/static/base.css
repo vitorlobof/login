@@ -1,0 +1,58 @@
+:root {
+    --color: white;
+
+    --navbar-height: 50px;
+}
+
+.navbar {
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: gray;
+    height: var(--navbar-height);
+    width: 100%;
+}
+
+.navbar span {
+    font-weight: 400;
+    font-size: 25px;
+    margin: 0 20px;
+    position: absolute;
+    top: 50%;
+    left: 30px;
+    transform: translate(0, -50%);
+}
+
+.navbar-btns {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.navbar-btn {
+    float: left;
+    margin: 0 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.navbar-btns-left {
+    left: 0;
+}
+
+.navbar-btns-right {
+    right: 0;
+}
+
+.navbar-profile img {
+    height: 25px;
+    border-radius: 50%;
+}
+
+.container {
+    width: 80%;
+    margin: 80px auto;
+    margin-bottom: 200px;
+}

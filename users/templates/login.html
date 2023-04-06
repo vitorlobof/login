@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block 'title' %}Login{% endblock %}
+
+{% block 'body' %}
+<div class="container">
+    {% if error_msg is not None %}
+        <div class="alert alert-danger" role="alert">
+            {{error_msg}}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login_validation' %}">{% csrf_token %}
+        <h1>Login</h1>
+        <hr>
+        
+        <label>Email:</label>
+        <input class="form" name="email" type="text" placeholder="Email...">
+
+        <label>Senha:</label>
+        <input class="form" name="password" type="password" placeholder="Senha...">
+        
+        <input class="btn btn-success" type="submit" value="Entrar">
+        <a class="btn btn-primary" href="{% url 'register' %}">Cadastrar-se</a>
+    </form>
+</div>
+{%endblock%}
+

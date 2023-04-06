@@ -1,0 +1,19 @@
+.alert {
+    border-radius: 0.25rem;
+    padding: 0.75rem 1.25rem;
+}
+
+.alert-success {
+    background-color: rgb(132, 245, 132);
+    border: 1px solid green;
+}
+
+.alert-warning {
+    background-color: rgb(253, 253, 153);
+    border: 1px solid yellow;
+}
+
+.alert-danger {
+    background-color: rgb(255, 138, 138);
+    border: 1px solid red;
+}
