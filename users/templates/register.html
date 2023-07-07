@@ -4,10 +4,12 @@
 
 {% block 'body' %}
 <div class="container">
-    {% if error_msg is not None %}
-        <div class="alert alert-danger" role="alert">
-            {{error_msg}}
-        </div>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="{{message.tags}}" role="alert">
+        {{message}}
+    </div>
+    {% endfor %}
     {% endif %}
 
     <form method="POST" action="{% url 'validation' %}">{% csrf_token %}

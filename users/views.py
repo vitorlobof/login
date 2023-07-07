@@ -1,17 +1,17 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.messages import constants
 from .models import User
 from hashlib import sha256
-import errors as err
+import users.validations as valid
 
 
 def register(request):
     if request.session.get('user_id') is not None:
         return redirect('home')
     
-    return render(request, 'register.html', {
-        'error_msg': err.msg(request.GET.get('error'))
-    })
+    return render(request, 'register.html')
 
 def validation(request):
     name = request.POST.get('name')
@@ -19,16 +19,17 @@ def validation(request):
     password = request.POST.get('password')
 
     try:
-        err.ValidateName(name).valid()
-        err.ValidateEmail(email).valid()
-        err.ValidatePassword(password).valid()
-    except err.RegisterError as e:
-        e = err.idx(e)
-        return redirect(f'{reverse("register")}?error={e}')
+        valid.ValidateName(name).valid()
+        valid.ValidateEmail(email).valid()
+        valid.ValidatePassword(password).valid()
+    except valid.RegisterError as e:
+        messages.add_message(request, constants.ERROR, e.MSG)
+        return redirect('register')
 
     if User.objects.filter(email=email).first() is not None:
-        e = err.idx(err.EmailAlreadyRegisteredError())
-        return redirect(f'{reverse("register")}?error={e}')
+        messages.add_message(
+            request, constants.ERROR, 'Email já registrado.')
+        return redirect('register')
 
     password = sha256(password.encode()).hexdigest()
     user = User.objects.create(
@@ -41,9 +42,7 @@ def login(request):
     if request.session.get('user_id') is not None:
         return redirect('home')
 
-    return render(request, 'login.html', {
-        'error_msg': err.msg(request.GET.get('error'))
-    })
+    return render(request, 'login.html')
 
 def login_validation(request):
     email = request.POST.get('email')
@@ -53,12 +52,12 @@ def login_validation(request):
     try:
         user = User.objects.get(email=email)
     except User.DoesNotExist:
-        e = err.idx(err.EmailNotFoundError())
-        return redirect(f'{reverse("login")}?error={e}')
+        messages.add_message(request, constants.ERROR, 'Email não cadastrado.')
+        return redirect('login')
 
     if user.password != password:
-        e = err.idx(err.PasswordIncorrectError())
-        return redirect(f'{reverse("login")}?error={e}')
+        messages.add_message(request, constants.ERROR, 'Senha incorreta.')
+        return redirect('login')
     
     request.session['user_id'] = user.id
     return redirect('home')
