@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
+
+@login_required(login_url='login')
 def home(request):
-    user_id = request.session.get('user_id')
-    if user_id is None:
-        return redirect('login')
-    
     return render(request, 'home.html')
 

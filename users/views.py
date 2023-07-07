@@ -1,14 +1,13 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.contrib.messages import constants
 from .models import User
-from hashlib import sha256
 import users.validations as valid
 
 
 def register(request):
-    if request.session.get('user_id') is not None:
+    if request.user.is_authenticated:
         return redirect('home')
     
     return render(request, 'register.html')
@@ -26,44 +25,48 @@ def validation(request):
         messages.add_message(request, constants.ERROR, e.MSG)
         return redirect('register')
 
-    if User.objects.filter(email=email).first() is not None:
+    if User.objects.filter(username=name).exists():
+        messages.add_message(
+            request,
+            constants.ERROR,
+            'Já existe um usuário com este nome.'
+        )
+        return redirect('register')
+
+    if User.objects.filter(email=email).exists():
         messages.add_message(
             request, constants.ERROR, 'Email já registrado.')
         return redirect('register')
 
-    password = sha256(password.encode()).hexdigest()
-    user = User.objects.create(
-        name=name, email=email, password=password)
+    user = User.objects.create_user(
+        username=name, email=email, password=password)
     
     request.session['user_id'] = user.id
     messages.add_message(request, constants.SUCCESS, 'Cadastro realizado com sucesso.')
     return redirect('home')
 
 def login(request):
-    if request.session.get('user_id') is not None:
+    if request.user.is_authenticated:
         return redirect('home')
 
     return render(request, 'login.html')
 
 def login_validation(request):
-    email = request.POST.get('email')
+    username = request.POST.get('username')
     password = request.POST.get('password')
-    password = sha256(password.encode()).hexdigest()
+    
+    user = auth.authenticate(request, username=username, password=password)
 
-    try:
-        user = User.objects.get(email=email)
-    except User.DoesNotExist:
-        messages.add_message(request, constants.ERROR, 'Email não cadastrado.')
-        return redirect('login')
-
-    if user.password != password:
-        messages.add_message(request, constants.ERROR, 'Senha incorreta.')
+    if not user:
+        messages.add_message(request, constants.ERROR, 'Username ou senha inválidos.')
         return redirect('login')
     
-    request.session['user_id'] = user.id
+
+    auth.login(request, user)
     messages.add_message(request, constants.SUCCESS, 'Você está na plataforma.')
     return redirect('home')
 
 def logout(request):
-    request.session.flush()
+    auth.logout(request)
+    messages.add_message(request, constants.WARNING,'Faça login antes de acessar a plataforma.')
     return redirect('login')
