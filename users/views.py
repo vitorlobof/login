@@ -36,6 +36,7 @@ def validation(request):
         name=name, email=email, password=password)
     
     request.session['user_id'] = user.id
+    messages.add_message(request, constants.SUCCESS, 'Cadastro realizado com sucesso.')
     return redirect('home')
 
 def login(request):
@@ -60,6 +61,7 @@ def login_validation(request):
         return redirect('login')
     
     request.session['user_id'] = user.id
+    messages.add_message(request, constants.SUCCESS, 'Você está na plataforma.')
     return redirect('home')
 
 def logout(request):

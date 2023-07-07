@@ -5,6 +5,14 @@
 {% block 'body' %}
 
 <div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="{{message.tags}}" role="alert">
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+
     <a class='btn btn-danger' href="{% url 'logout' %}">Sair</a>
 </div>
 
