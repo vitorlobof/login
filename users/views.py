@@ -41,7 +41,7 @@ def validation(request):
     user = User.objects.create_user(
         username=name, email=email, password=password)
     
-    request.session['user_id'] = user.id
+    auth.login(request, user)
     messages.add_message(request, constants.SUCCESS, 'Cadastro realizado com sucesso.')
     return redirect('home')
 
