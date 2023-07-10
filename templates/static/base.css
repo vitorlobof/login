@@ -56,3 +56,11 @@
     margin: 80px auto;
     margin-bottom: 200px;
 }
+
+.list {
+    list-style-type: none;
+}
+
+.list > li {
+    margin: 10px 0;
+}
